@@ -1,0 +1,22 @@
+{
+  "name": "appointments",
+  "version": "1.0.0",
+  "description": "An appointment system for hair salon built with React using TDD approach.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yufunz/react-appointment-tdd.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yufunz/react-appointment-tdd/issues"
+  },
+  "homepage": "https://github.com/yufunz/react-appointment-tdd#readme",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
+}
