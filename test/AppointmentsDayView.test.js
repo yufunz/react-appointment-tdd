@@ -2,9 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Appointment, AppointmentsDayView } from "../src/AppointmentsDayView";
 import { act } from "react-dom/test-utils";
+import { experiments } from "webpack";
 
 describe("Appointment", () => {
   let container;
+  const blankCustomer = { firstName: "", lastName: "", phoneNumber: "" };
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -14,16 +16,66 @@ describe("Appointment", () => {
   const render = (component) =>
     act(() => ReactDOM.createRoot(container).render(component));
 
+  const appointmentTable = () =>
+    document.querySelector("#appointmentView > table");
+
+  it("renders a table", () => {
+    render(<Appointment customer={blankCustomer} />);
+    expect(appointmentTable()).not.toBeNull();
+  });
+
   it("renders the customer first name", () => {
     const customer = { firstName: "Ashley" };
     render(<Appointment customer={customer} />);
-    expect(document.body.textContent).toContain("Ashley");
+    expect(appointmentTable().textContent).toContain("Ashley");
   });
 
   it("renders another customer first name", () => {
     const customer = { firstName: "Jordan" };
     render(<Appointment customer={customer} />);
-    expect(document.body.textContent).toContain("Jordan");
+    expect(appointmentTable().textContent).toContain("Jordan");
+  });
+
+  it("renders the customer last name", () => {
+    const customer = { lastName: "Jones" };
+    render(<Appointment customer={customer} />);
+    expect(appointmentTable().textContent).toContain("Jones");
+  });
+
+  it("renders the customer phone number", () => {
+    const customer = { phoneNumber: "123456789" };
+    render(<Appointment customer={customer} />);
+    expect(appointmentTable().textContent).toContain("123456789");
+  });
+
+  it("renders another customer phone number", () => {
+    const customer = { phoneNumber: "987654321" };
+    render(<Appointment customer={customer} />);
+    expect(appointmentTable().textContent).toContain("987654321");
+  });
+
+  it("renders the stylist name", () => {
+    render(<Appointment customer={blankCustomer} stylist="Sam" />);
+    expect(appointmentTable().textContent).toContain("Sam");
+  });
+
+  it("renders another stylist name", () => {
+    render(<Appointment customer={blankCustomer} stylist="Jo" />);
+    expect(appointmentTable().textContent).toContain("Jo");
+  });
+
+  it("renders an h3 element", () => {
+    render(<Appointment customer={blankCustomer} />);
+    expect(document.querySelector("h3")).not.toBeNull();
+  });
+
+  it("renders the time as the heading", () => {
+    const today = new Date();
+    const timestamp = today.setHours(9, 0, 0);
+    render(<Appointment customer={blankCustomer} startsAt={timestamp} />);
+    expect(document.querySelector("h3").textContent).toEqual(
+      "Today's appointment at 09:00"
+    );
   });
 });
 
