@@ -4,7 +4,8 @@
   "description": "An appointment system for hair salon built with React using TDD approach.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -20,8 +21,11 @@
     "@babel/plugin-transform-runtime": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@babel/preset-react": "^7.22.5",
+    "babel-loader": "^9.1.2",
     "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0"
+    "jest-environment-jsdom": "^29.5.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "@babel/runtime": "^7.22.5",
