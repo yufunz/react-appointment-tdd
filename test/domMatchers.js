@@ -1,2 +1,3 @@
 import { toContainText } from "./machers/toContainText";
-expect.extend({ toContainText });
+import { toHaveClass } from "./machers/toHaveClass";
+expect.extend({ toContainText, toHaveClass });
