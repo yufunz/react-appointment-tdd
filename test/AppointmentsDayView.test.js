@@ -7,7 +7,7 @@ import {
   element,
   elements,
   textOf,
-  typeOf
+  typesOf
 } from "./reactTestExtensions";
 
 describe("Appointment", () => {
@@ -88,6 +88,8 @@ describe("AppointmentsDayView", () => {
     initializeReactContainer();
   });
 
+  const secondButton = () => elements("button")[1];
+
   it("renders a div with the right id", () => {
     render(<AppointmentsDayView appointments={[]} />);
     expect(element("div#appointmentsDayView")).not.toBeNull();
@@ -95,21 +97,17 @@ describe("AppointmentsDayView", () => {
 
   it("renders an ol element to display appointments", () => {
     render(<AppointmentsDayView appointments={[]} />);
-    const listElement = element("ol");
-    expect(listElement).not.toBeNull();
+    expect(element("ol")).not.toBeNull();
   });
 
   it("renders an li for each appointment", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
-    const listChildren = elements("ol > li");
-    expect(listChildren).toHaveLength(2);
+    expect(elements("ol > li")).toHaveLength(2);
   });
 
   it("renders the time of each appointment", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
-    const listChildren = elements("li");
-    expect(listChildren[0]).toContainText("12:00");
-    expect(listChildren[1]).toContainText("13:00");
+    expect(textOf(elements("li"))).toEqual(["12:00", "13:00"]);
   });
 
   it("initially shows a message saying there are no appointments today", () => {
@@ -126,15 +124,23 @@ describe("AppointmentsDayView", () => {
 
   it("has a button element in each li", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
-    const buttons = elements("li > button");
-    expect(buttons).toHaveLength(2);
-    expect(buttons[0].type).toEqual("button");
+    expect(typesOf(elements("li > *"))).toEqual(["button", "button"]);
   });
 
   it("renders another appointment when selected", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
-    const button = elements("button")[1];
-    click(button);
+    click(secondButton());
     expect(document.body).toContainText("Jordan");
+  });
+
+  it("adds toggled class to button when selected", () => {
+    render(<AppointmentsDayView appointments={twoAppointments} />);
+    click(secondButton());
+    expect(secondButton().className).toContain("toggled");
+  });
+
+  it("does not add toggled class if button is not selected", () => {
+    render(<AppointmentsDayView appointments={twoAppointments} />);
+    expect(secondButton().className).not.toContain("toggled");
   });
 });

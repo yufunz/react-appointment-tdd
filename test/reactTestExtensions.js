@@ -20,7 +20,7 @@ export const element = (selector) => document.querySelector(selector);
 export const elements = (selector) =>
   Array.from(document.querySelectorAll(selector));
 
-export const typeOf = (elements) => elements.map((element) => element.type);
+export const typesOf = (elements) => elements.map((element) => element.type);
 
 export const textOf = (elements) =>
   elements.map((element) => element.textContent);
