@@ -17,8 +17,7 @@ describe("Appointment", () => {
     initializeReactContainer();
   });
 
-  const appointmentTable = () =>
-    document.querySelector("#appointmentView > table");
+  const appointmentTable = () => element("#appointmentView > table");
 
   it("renders a table", () => {
     render(<Appointment customer={blankCustomer} />);
@@ -67,16 +66,14 @@ describe("Appointment", () => {
 
   it("renders an h3 element", () => {
     render(<Appointment customer={blankCustomer} />);
-    expect(document.querySelector("h3")).not.toBeNull();
+    expect(element("h3")).not.toBeNull();
   });
 
   it("renders the time as the heading", () => {
     const today = new Date();
     const timestamp = today.setHours(9, 0, 0);
     render(<Appointment customer={blankCustomer} startsAt={timestamp} />);
-    expect(document.querySelector("h3")).toContainText(
-      "Today's appointment at 09:00"
-    );
+    expect(element("h3")).toContainText("Today's appointment at 09:00");
   });
 });
 
@@ -93,12 +90,12 @@ describe("AppointmentsDayView", () => {
 
   it("renders a div with the right id", () => {
     render(<AppointmentsDayView appointments={[]} />);
-    expect(document.querySelector("div#appointmentsDayView")).not.toBeNull();
+    expect(element("div#appointmentsDayView")).not.toBeNull();
   });
 
   it("renders an ol element to display appointments", () => {
     render(<AppointmentsDayView appointments={[]} />);
-    const listElement = document.querySelector("ol");
+    const listElement = element("ol");
     expect(listElement).not.toBeNull();
   });
 
