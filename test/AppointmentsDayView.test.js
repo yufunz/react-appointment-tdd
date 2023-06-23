@@ -1,6 +1,14 @@
 import React from "react";
 import { Appointment, AppointmentsDayView } from "../src/AppointmentsDayView";
-import { initializeReactContainer, render, click } from "./reactTestExtensions";
+import {
+  initializeReactContainer,
+  render,
+  click,
+  element,
+  elements,
+  textOf,
+  typeOf
+} from "./reactTestExtensions";
 
 describe("Appointment", () => {
   const blankCustomer = { firstName: "", lastName: "", phoneNumber: "" };
@@ -20,7 +28,6 @@ describe("Appointment", () => {
   it("renders the customer first name", () => {
     const customer = { firstName: "Ashley" };
     render(<Appointment customer={customer} />);
-    //expect(appointmentTable().textContent).toContain("Ashley");
     expect(appointmentTable()).toContainText("Ashley");
   });
 
@@ -97,13 +104,13 @@ describe("AppointmentsDayView", () => {
 
   it("renders an li for each appointment", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
-    const listChildren = document.querySelectorAll("ol > li");
+    const listChildren = elements("ol > li");
     expect(listChildren).toHaveLength(2);
   });
 
   it("renders the time of each appointment", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
-    const listChildren = document.querySelectorAll("li");
+    const listChildren = elements("li");
     expect(listChildren[0]).toContainText("12:00");
     expect(listChildren[1]).toContainText("13:00");
   });
@@ -122,14 +129,14 @@ describe("AppointmentsDayView", () => {
 
   it("has a button element in each li", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
-    const buttons = document.querySelectorAll("li > button");
+    const buttons = elements("li > button");
     expect(buttons).toHaveLength(2);
     expect(buttons[0].type).toEqual("button");
   });
 
   it("renders another appointment when selected", () => {
     render(<AppointmentsDayView appointments={twoAppointments} />);
-    const button = document.querySelectorAll("button")[1];
+    const button = elements("button")[1];
     click(button);
     expect(document.body).toContainText("Jordan");
   });
