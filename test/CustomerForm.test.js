@@ -14,7 +14,8 @@ import { CustomerForm } from "../src/CustomerForm";
 
 describe("CustomerForm", () => {
   const blankCustomer = {
-    firstName: ""
+    firstName: "",
+    lastName: ""
   };
 
   beforeEach(() => {
@@ -88,11 +89,20 @@ describe("CustomerForm", () => {
 
   describe("first name field", () => {
     itRendersAsATextBox("firstName");
+    itAssignsAnIdThatMatchesTheLabelId("firstName");
     itIncludesTheExistingValue("firstName", "David");
     itRendersALabel("firstName", "First name");
-    itAssignsAnIdThatMatchesTheLabelId("firstName");
     itSavesExistingValue("firstName", "David");
     itSavesNewValue("firstName", "Jamie");
+  });
+
+  describe("last name field", () => {
+    itRendersAsATextBox("lastName");
+    itAssignsAnIdThatMatchesTheLabelId("lastName");
+    itIncludesTheExistingValue("lastName", "Jones");
+    itRendersALabel("lastName", "Last name");
+    itSavesExistingValue("lastName", "Jones");
+    itSavesNewValue("lastName", "Carters");
   });
 
   it("renders a submit button", () => {
