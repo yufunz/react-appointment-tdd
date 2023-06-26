@@ -15,7 +15,8 @@ import { CustomerForm } from "../src/CustomerForm";
 describe("CustomerForm", () => {
   const blankCustomer = {
     firstName: "",
-    lastName: ""
+    lastName: "",
+    phoneNumber: ""
   };
 
   beforeEach(() => {
@@ -103,6 +104,15 @@ describe("CustomerForm", () => {
     itRendersALabel("lastName", "Last name");
     itSavesExistingValue("lastName", "Jones");
     itSavesNewValue("lastName", "Carters");
+  });
+
+  describe("phone number field", () => {
+    itRendersAsATextBox("phoneNumber");
+    itAssignsAnIdThatMatchesTheLabelId("phoneNumber");
+    itIncludesTheExistingValue("phoneNumber", "012345");
+    itRendersALabel("phoneNumber", "Phone number");
+    itSavesExistingValue("phoneNumber", "012345");
+    itSavesNewValue("phoneNumber", "345678");
   });
 
   it("renders a submit button", () => {
