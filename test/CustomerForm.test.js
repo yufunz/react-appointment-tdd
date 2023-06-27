@@ -8,7 +8,8 @@ import {
   click,
   submit,
   submitButton,
-  change
+  change,
+  labelFor
 } from "./reactTestExtensions";
 import { CustomerForm } from "../src/CustomerForm";
 
@@ -46,13 +47,12 @@ describe("CustomerForm", () => {
   const itRendersALabel = (fieldName, text) => {
     it("renders a label", () => {
       render(<CustomerForm original={blankCustomer} />);
-      const label = element(`label[for=${fieldName}]`);
-      expect(label).not.toBeNull();
+      expect(labelFor(fieldName)).not.toBeNull();
     });
+
     it(`renders ${fieldName} as the label content`, () => {
       render(<CustomerForm original={blankCustomer} />);
-      const label = element(`label[for=${fieldName}]`);
-      expect(label).toContainText(text);
+      expect(labelFor(fieldName)).toContainText(text);
     });
   };
 
