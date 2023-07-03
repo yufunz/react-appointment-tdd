@@ -111,11 +111,20 @@ export const AppointmentForm = ({
   availableTimeSlots,
   onSubmit
 }) => {
+  const [appointment, setAppointment] = useState(original);
+
+  const handleSelectBoxChange = ({ target: { value, name } }) => {
+    setAppointment((appointment) => ({
+      ...appointment,
+      [name]: value
+    }));
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     onSubmit(appointment);
   };
-  const [appointment, setAppointment] = useState(original);
+
   const handleStartsAtChange = useCallback(
     ({ target: { value } }) =>
       setAppointment((appointment) => ({
@@ -127,12 +136,20 @@ export const AppointmentForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <select name="service" value={original.service} readOnly>
+      <label htmlFor="service">Salon service</label>
+      <select
+        name="service"
+        id="service"
+        value={original.service}
+        onChange={handleSelectBoxChange}
+      >
         <option />
         {selectableServices.map((s) => (
           <option key={s}>{s}</option>
         ))}
       </select>
+
+      <select name="stylist" />
       <TimeSlotTable
         salonOpensAt={salonOpensAt}
         salonClosesAt={salonClosesAt}
