@@ -5,7 +5,7 @@ const timeIncrements = (numTimes, startTime, increment) =>
     .fill([startTime])
     .reduce((acc, _, i) => acc.concat([startTime + i * increment]));
 
-const dailyTimeSltos = (salonOpensAt, salonClosesAt) => {
+const dailyTimeSlots = (salonOpensAt, salonClosesAt) => {
   const totalSlots = (salonClosesAt - salonOpensAt) * 2;
   const startTime = new Date().setHours(salonOpensAt, 0, 0, 0);
   const increment = 30 * 60 * 1000;
@@ -59,7 +59,7 @@ const RadioButtonIfAvailable = ({
   return null;
 };
 
-export const TimeSlotTable = ({
+const TimeSlotTable = ({
   salonOpensAt,
   salonClosesAt,
   today,
@@ -68,7 +68,7 @@ export const TimeSlotTable = ({
   handleChange
 }) => {
   const dates = weeklyDateValues(today);
-  const timeSlots = dailyTimeSltos(salonOpensAt, salonClosesAt);
+  const timeSlots = dailyTimeSlots(salonOpensAt, salonClosesAt);
   return (
     <table id="time-slots">
       <thead>
@@ -104,6 +104,8 @@ export const TimeSlotTable = ({
 export const AppointmentForm = ({
   original,
   selectableServices,
+  selectableStylists,
+  serviceStylists,
   service,
   salonOpensAt,
   salonClosesAt,
@@ -134,13 +136,17 @@ export const AppointmentForm = ({
     []
   );
 
+  const stylistsForService = appointment.service
+    ? serviceStylists[appointment.service]
+    : selectableStylists;
+
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="service">Salon service</label>
       <select
         name="service"
         id="service"
-        value={original.service}
+        value={appointment.service}
         onChange={handleSelectBoxChange}
       >
         <option />
@@ -149,7 +155,18 @@ export const AppointmentForm = ({
         ))}
       </select>
 
-      <select name="stylist" />
+      <label htmlFor="stylist">Stylist</label>
+      <select
+        name="stylist"
+        id="stylist"
+        value={appointment.stylist}
+        onChange={handleSelectBoxChange}
+      >
+        <option />/
+        {stylistsForService.map((s) => (
+          <option key={s}>{s}</option>
+        ))}
+      </select>
       <TimeSlotTable
         salonOpensAt={salonOpensAt}
         salonClosesAt={salonClosesAt}
@@ -174,5 +191,14 @@ AppointmentForm.defaultProps = {
     "Beard trim",
     "Cut & beard trim",
     "Extensions"
-  ]
+  ],
+  selectableStylists: ["Mary", "Jo", "Peter", "Sam"],
+  serviceStylists: {
+    Cut: ["Mary", "Jo", "Peter", "Sam"],
+    "Blow-dry": ["Mary", "Jo", "Peter", "Sam"],
+    "Cut & color": ["Mary", "Jo"],
+    "Beard trim": ["Peter", "Sam"],
+    "Cut & beard trim": ["Peter", "Sam"],
+    Extensions: ["Mary", "Peter"]
+  }
 };
