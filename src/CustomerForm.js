@@ -12,7 +12,7 @@ export const CustomerForm = ({ original, onSubmit }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form id="customer" onSubmit={handleSubmit}>
       <label htmlFor="firstName">First name</label>
       <input
         type="text"

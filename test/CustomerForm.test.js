@@ -13,6 +13,23 @@ import {
 } from "./reactTestExtensions";
 import { CustomerForm } from "../src/CustomerForm";
 
+const singleArgumentSpy = () => {
+  let receivedArgument;
+  return {
+    fn: (arg) => (receivedArgument = arg),
+    receivedArgument: () => receivedArgument
+  };
+};
+
+const spy = () => {
+  let receivedArguments;
+  return {
+    fn: (...args) => (receivedArguments = args),
+    receivedArguments: () => receivedArguments,
+    receivedArgument: (n) => receivedArguments[n]
+  };
+};
+
 describe("CustomerForm", () => {
   const blankCustomer = {
     firstName: "",
@@ -60,7 +77,7 @@ describe("CustomerForm", () => {
       expect(field(fieldName).id).toEqual(fieldName);
     });
 
-  const itSavesNewValue = (fieldName, value) =>
+  const itSubmitsNewValue = (fieldName, value) =>
     it("saves new value when submitted", () => {
       expect.hasAssertions();
       render(
@@ -73,17 +90,13 @@ describe("CustomerForm", () => {
       click(submitButton());
     });
 
-  const itSavesExistingValue = (fieldName, value) =>
+  const itSubmitsExistingValue = (fieldName, value) =>
     it("saves existing value when submitted", () => {
-      expect.hasAssertions();
+      const submitSpy = spy();
       const customer = { [fieldName]: value };
-      render(
-        <CustomerForm
-          original={customer}
-          onSubmit={(props) => expect(props[fieldName]).toEqual(value)}
-        />
-      );
+      render(<CustomerForm original={customer} onSubmit={submitSpy.fn} />);
       click(submitButton());
+      expect(submitSpy).toBeCalledWith(customer);
     });
 
   describe("first name field", () => {
@@ -91,8 +104,8 @@ describe("CustomerForm", () => {
     itAssignsAnIdThatMatchesTheLabelId("firstName");
     itIncludesTheExistingValue("firstName", "David");
     itRendersALabel("firstName", "First name");
-    itSavesExistingValue("firstName", "David");
-    itSavesNewValue("firstName", "Jamie");
+    itSubmitsExistingValue("firstName", "David");
+    itSubmitsNewValue("firstName", "Jamie");
   });
 
   describe("last name field", () => {
@@ -100,8 +113,8 @@ describe("CustomerForm", () => {
     itAssignsAnIdThatMatchesTheLabelId("lastName");
     itIncludesTheExistingValue("lastName", "Jones");
     itRendersALabel("lastName", "Last name");
-    itSavesExistingValue("lastName", "Jones");
-    itSavesNewValue("lastName", "Carters");
+    itSubmitsExistingValue("lastName", "Jones");
+    itSubmitsNewValue("lastName", "Carters");
   });
 
   describe("phone number field", () => {
@@ -109,8 +122,8 @@ describe("CustomerForm", () => {
     itAssignsAnIdThatMatchesTheLabelId("phoneNumber");
     itIncludesTheExistingValue("phoneNumber", "012345");
     itRendersALabel("phoneNumber", "Phone number");
-    itSavesExistingValue("phoneNumber", "012345");
-    itSavesNewValue("phoneNumber", "345678");
+    itSubmitsExistingValue("phoneNumber", "012345");
+    itSubmitsNewValue("phoneNumber", "345678");
   });
 
   it("renders a submit button", () => {
