@@ -4,6 +4,7 @@ import {
   render,
   form,
   field,
+  element,
   submit,
   submitButton,
   change,
@@ -12,6 +13,7 @@ import {
   submitAndWait
 } from "./reactTestExtensions";
 import { CustomerForm } from "../src/CustomerForm";
+import { electron } from "webpack";
 
 const spy = () => {
   let returnValue;
@@ -32,6 +34,8 @@ const fetchResponseOk = (body) =>
     ok: true,
     json: () => Promise.resolve(body)
   });
+
+const fetchResponseError = () => Promise.resolve({ ok: false });
 
 describe("CustomerForm", () => {
   const bodyOfLastFetchRequest = () =>
@@ -178,5 +182,34 @@ describe("CustomerForm", () => {
     render(<CustomerForm original={customer} onSave={saveSpy.fn} />);
     await clickAndWait(submitButton());
     expect(saveSpy).toBeCalledWith(customer);
+  });
+
+  it("renders an alert space", async () => {
+    render(<CustomerForm original={blankCustomer} />);
+    expect(element("[role=alert]")).not.toBeNull();
+  });
+
+  it("initially has no text in the alert space", async () => {
+    render(<CustomerForm original={blankCustomer} />);
+    expect(element("[role=alert]")).not.toContainText("error occurred");
+  });
+
+  describe("when POST request returns an error", () => {
+    beforeEach(() => {
+      fetchSpy.stubReturnValue(fetchResponseError());
+    });
+
+    it("does not notify onSave if the POST request returns an error", async () => {
+      const saveSpy = spy();
+      render(<CustomerForm original={blankCustomer} onSave={saveSpy.fn} />);
+      await clickAndWait(submitButton());
+      expect(saveSpy).not.toBeCalledWith();
+    });
+
+    it("renders error message when fetch call fails", async () => {
+      render(<CustomerForm original={blankCustomer} />);
+      await clickAndWait(submitButton());
+      expect(element("[role=alert]")).toContainText("error occurred");
+    });
   });
 });
