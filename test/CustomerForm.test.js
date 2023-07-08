@@ -13,22 +13,10 @@ import {
   submitAndWait
 } from "./reactTestExtensions";
 import { CustomerForm } from "../src/CustomerForm";
-
-const fetchResponseOk = (body) =>
-  Promise.resolve({
-    ok: true,
-    json: () => Promise.resolve(body)
-  });
-
-const fetchResponseError = () => Promise.resolve({ ok: false });
+import { bodyOfLastFetchRequest } from "./spyHelpers";
+import { fetchResponseOk, fetchResponseError } from "./builders/fetch";
 
 describe("CustomerForm", () => {
-  const bodyOfLastFetchRequest = () => {
-    const allCalls = global.fetch.mock.calls;
-    const lastCall = allCalls[allCalls.length - 1];
-    return JSON.parse(lastCall[1].body);
-  };
-
   const blankCustomer = {
     firstName: "",
     lastName: "",
